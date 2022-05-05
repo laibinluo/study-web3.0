@@ -1,22 +1,27 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
 
-contract Greeter {
-    string private greeting;
+contract Token {
+    string public name = "My Token";
+    string public symbol = "MTN";
+    uint256 public totalSupply  = 1000000;
 
-    constructor(string memory _greeting) {
-        console.log("Deploying a Greeter with greeting:", _greeting);
-        greeting = _greeting;
+    address public owner;
+
+    mapping (address=>uint) balances;
+
+    constructor() {
+       owner = msg.sender;
+       balances[msg.sender] = totalSupply;
     }
 
-    function greet() public view returns (string memory) {
-        return greeting;
-    }
+    function transfer(address  to, uint amount) external {
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+    } 
 
-    function setGreeting(string memory _greeting) public {
-        console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
-        greeting = _greeting;
+    function balancesOf(address account) external view returns(uint) {
+        return balances[account];
     }
 }
